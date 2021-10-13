@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<title>ExportVideo</title>
+
+<head>
+    <meta charset="UTF-8">
+    <script src="./lib/CSInterface.js"></script>
+    <script src="./lib/jquery-1.9.1.js"></script>
+
+    <script type="text/javascript">
+        function quality(c) {
+            var csInterface = new CSInterface();
+
+            switch (c) {
+                case 1:
+                    var epr = csInterface.getSystemPath(SystemPath.EXTENSION) + '\\\\01 - Match Source - High bitrate.epr';
+                    epr = replace3(epr);
+                    csInterface.evalScript('$._PPP.setepr("' + epr + '")');
+                    break;
+                case 2:
+                    var epr = csInterface.getSystemPath(SystemPath.EXTENSION) + '\\\\01 - Match Source - Medium bitrate.epr'
+                    epr = replace3(epr);
+                    csInterface.evalScript('$._PPP.setepr("' + epr + '")');
+                    break;
+                case 3:
+                    var epr = csInterface.getSystemPath(SystemPath.EXTENSION) + '\\\\02 - Match Source - Low bitrate.epr';
+                    epr = replace3(epr);
+                    csInterface.evalScript('$._PPP.setepr("' + epr + '")');
+                    break;
+                default:
+                    break;
+            }
+
+        }
+        $(document).ready(function() {
+            quality(1);
+            // var csInterface = new CSInterface();
+            // var epr = csInterface.getSystemPath(SystemPath.EXTENSION) + '\\\\01 - Match Source - High bitrate.epr';
+            // epr = replace3(epr);
+            // csInterface.evalScript('$._PPP.setepr("' + epr + '")');
+        });
+
+        function replace2(str) {
+            var a = str.split('\\');
+            var root = '';
+            for (let i = 0; i < a.length; i++) {
+                if (i == a.length - 1) {
+                    root = root + a[i];
+                } else {
+                    root = root + a[i] + "\\\\";
+                }
+            }
+            return (root);
+        };
+
+        function replace3(str) {
+            var a = str.split('/');
+            var root = '';
+            for (let i = 0; i < a.length; i++) {
+                if (i == a.length - 1) {
+                    root = root + a[i];
+                } else {
+                    root = root + a[i] + "\\\\";
+                }
+            }
+            return (root);
+        };
+
+        function runAll(e) {
+            var cs = new CSInterface();
+            var form1 = document.getElementById('form1').value;
+
+            // cs.evalScript('$._MYFUNCTIONS.moveBins()');
+
+            switch (e) {
+                case 0:
+                    if (form1 != '') {
+                        var root = replace2(form1);
+                        // console.log(root);
+
+                        cs.evalScript('$._PPP.findfolder("' + root + '")', function(rtn) {
+
+                            if (rtn == 'true') {
+                                cs.evalScript('$._PPP.findfolder("' + root + '\\\\01-产品展示")', function(path) {
+                                    if (path == 'true') {
+                                        document.getElementById('cp_p').value = root + "\\\\01-产品展示";
+                                    } else {
+                                        document.getElementById('cp_p').value = '目录不存在！';
+                                    }
+                                });
+                                cs.evalScript('$._PPP.findfolder("' + root + '\\\\02-成分展示")', function(path) {
+                                    if (path == 'true') {
+                                        document.getElementById('cf_p').value = root + "\\\\02-成分展示";
+                                    } else {
+                                        document.getElementById('cf_p').value = '目录不存在！';
+                                    }
+                                });
+                                cs.evalScript('$._PPP.findfolder("' + root + '\\\\03-使用场景")', function(path) {
+                                    if (path == 'true') {
+                                        document.getElementById('cj_p').value = root + "\\\\03-使用场景";
+                                    } else {
+                                        document.getElementById('cj_p').value = '目录不存在！';
+                                    }
+                                });
+                                cs.evalScript('$._PPP.findfolder("' + root + '\\\\04-使用过程")', function(path) {
+                                    if (path == 'true') {
+                                        document.getElementById('gc_p').value = root + "\\\\04-使用过程";
+                                    } else {
+                                        document.getElementById('gc_p').value = '目录不存在！';
+                                    }
+                                });
+                                cs.evalScript('$._PPP.findfolder("' + root + '\\\\05-使用效果")', function(path) {
+                                    if (path == 'true') {
+                                        document.getElementById('xg_p').value = root + "\\\\05-使用效果";
+                                    } else {
+                                        document.getElementById('xg_p').value = '目录不存在！';
+                                    }
+                                });
+                                cs.evalScript('$._PPP.findfolder("' + root + '\\\\06-达人推荐")', function(path) {
+                                    if (path == 'true') {
+                                        document.getElementById('dr_p').value = root + "\\\\06-达人推荐";
+                                    } else {
+                                        document.getElementById('dr_p').value = '目录不存在！';
+                                    }
+                                });
+                                cs.evalScript('$._PPP.findfolder("' + root + '\\\\07-明星推荐")', function(path) {
+                                    if (path == 'true') {
+                                        document.getElementById('mx_p').value = root + "\\\\07-明星推荐";
+                                    } else {
+                                        document.getElementById('mx_p').value = '目录不存在！';
+                                    }
+                                });
+                            } else {
+                                document.getElementById('form1').value = "目录不存在！";
+                            }
+                        });
+
+
+
+                    }
+                    break;
+                case 1:
+                    var path = document.getElementById('cp_p').value;
+                    if (path != '' && path != '目录不存在！')
+                        cs.evalScript('$._PPP.export2("' + path + '")');
+                    break;
+                case 2:
+                    var path = document.getElementById('cf_p').value;
+                    if (path != '' && path != '目录不存在！')
+                        cs.evalScript('$._PPP.export2("' + path + '")');
+                    break;
+                case 3:
+                    var path = document.getElementById('cj_p').value;
+                    if (path != '' && path != '目录不存在！')
+                        cs.evalScript('$._PPP.export2("' + path + '")');
+                    break;
+                case 4:
+                    var path = document.getElementById('gc_p').value;
+                    if (path != '' && path != '目录不存在！')
+                        cs.evalScript('$._PPP.export2("' + path + '")');
+                    break;
+                case 5:
+                    var path = document.getElementById('xg_p').value;
+                    if (path != '' && path != '目录不存在！')
+                        cs.evalScript('$._PPP.export2("' + path + '")');
+                    break;
+                case 6:
+                    var path = document.getElementById('dr_p').value;
+                    if (path != '' && path != '目录不存在！')
+                        cs.evalScript('$._PPP.export2("' + path + '")');
+                    break;
+                case 7:
+                    var path = document.getElementById('mx_p').value;
+                    if (path != '' && path != '目录不存在！')
+                        cs.evalScript('$._PPP.export2("' + path + '")');
+                    break;
+                case 8:
+                    var root = document.getElementById('zd_p').value;
+                    root = replace2(root);
+                    cs.evalScript('$._PPP.findfolder("' + root + '")', function(p) {
+                        if (p == 'true') {
+                            // document.getElementById('dr_p').value = root + "\\\\06-达人推荐";
+                            cs.evalScript('$._PPP.export2("' + root + '")');
+                        } else {
+                            document.getElementById('zd_p').value = '目录不存在！';
+                        }
+                    });
+
+                    break;
+                default:
+                    break;
+            }
+
+        };
+    </script>
+</head>
+<style>
+    body {
+        background: #222;
+    }
+    
+    h3 {
+        color: #999;
+        margin: 2px;
+    }
+    
+    p {
+        color: gray;
+        padding: 0;
+        margin: 2px;
+        display: inline-block;
+    }
+    
+    .bq {
+        background: #333;
+        border: none;
+    }
+    
+    div button {
+        color: gray;
+        background: #222;
+        border: #555 1px solid;
+        cursor: pointer;
+    }
+    
+    input {
+        text-align: center;
+        color: #777;
+    }
+    
+    label {
+        cursor: pointer;
+        padding-right: 10px;
+        color: #555;
+    }
+</style>
+
+<body>
+    <h3>导出插件 ExoprtVideo 1.0</h3>
+    <div>
+        <p>文件目录</p>
+        <input style="border: none;background: #555; color: #eee;" type="text" id="form1" value="">
+        <button id="check" type="run" onclick="runAll(0)">检索目录</button>
+    </div>
+    <div>
+        <p>产品展示</p>
+        <input class="bq" type="text" id="cp_p" value="" disabled="disabled">
+        <button id="cp" type="run" onclick="runAll(1)">导入目录</button>
+    </div>
+    <div>
+        <p>成分展示</p>
+        <input class="bq" type="text" id="cf_p" value="" disabled="disabled">
+        <button id="cf" type="run" onclick="runAll(2)">导入目录</button>
+    </div>
+    <div>
+        <p>使用场景</p>
+        <input class="bq" type="text" id="cj_p" value="" disabled="disabled">
+        <button id="cj" type="run" onclick="runAll(3)">导入目录</button>
+    </div>
+    <div>
+        <p>使用过程</p>
+        <input class="bq" type="text" id="gc_p" value="" disabled="disabled">
+        <button id="gc" type="run" onclick="runAll(4)">导入目录</button>
+    </div>
+    <div>
+        <p>使用效果</p>
+        <input class="bq" type="text" id="xg_p" value="" disabled="disabled">
+        <button id="xg" type="run" onclick="runAll(5)">导入目录</button>
+    </div>
+    <div>
+        <p>达人推荐</p>
+        <input class="bq" type="text" id="dr_p" value="" disabled="disabled">
+        <button id="dr" type="run" onclick="runAll(6)">导入目录</button>
+    </div>
+    <div>
+        <p>明星推荐</p>
+        <input class="bq" type="text" id="mx_p" value="" disabled="disabled">
+        <button id="mx" type="run" onclick="runAll(7)">导入目录</button>
+    </div>
+    <div>
+        <p>指定目录</p>
+        <input style="border: none;background: #555; color: #eee;" type="text" id="zd_p" value="">
+        <button id="zd" type="run" onclick="runAll(8)">导入目录</button>
+    </div>
+    <form action="" method="post">
+        <label><input onclick="quality(1)" name="q" type="radio" value="" checked="checked" />高质量</label>
+        <label><input onclick="quality(2)" name="q" type="radio" value="" />中质量</label>
+        <label><input onclick="quality(3)" name="q" type="radio" value="" />低质量</label>
+    </form>
+
+
+</body>
+
+</html>
